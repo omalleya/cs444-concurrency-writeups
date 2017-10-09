@@ -70,6 +70,35 @@ Fall 2017
 
 \section{Log of Commands}
 \noindent Log of commands used to perform the requested actions
+\begin{enumerate}
+\item \texttt{cd /scratch/fall2017}
+\item \texttt{ls}
+\item \texttt{mkdir 19}
+\item \texttt{ls}
+\item \texttt{19}
+\item \texttt{git clone git://git.yoctoproject.org/linux-yocto-3.19}
+\item \texttt{git status}
+\item \texttt{git add .}
+\item \texttt{git commit -m "initial commit"}
+\item \texttt{git status}
+\item \texttt{cd ..}
+\item \texttt{cd fall2017}
+\item \texttt{cd ..}
+\item \texttt{./acl\_open ../fall2017/19 simsw}
+\item \texttt{cd ..}
+\item \texttt{cd fall2017}
+\item \texttt{cd 19}
+\item \texttt{cd linux-yocto-3.19/}
+\item \texttt{git checkout v3.19.2}
+\item \texttt{source ../../../opt/poky/1.8/environment-setup-i586-poky-linux }
+\item \texttt{cp ../../../files/bzImage-qemux86.bin .}
+\item \texttt{cp ../../../files/core-image-lsb-sdk-qemux86.ext4 .}
+\item \texttt{make menuconfig}
+\item \texttt{qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel bzImage-qemux86.bin -drive file=core-image-lsb-sdk-qemux86.ext4,if=virtio -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/vda rw console=ttyS0 debug"}
+\item \texttt{\$GDB}
+\item \texttt{target remote :5519}
+\item \texttt{qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4,if=virtio -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/vda rw console=ttyS0 debug"}
+\end{enumerate}
 
 \section{Flag Definitions}
 \noindent An explanation of each and every flag in the listed qemu command-line
