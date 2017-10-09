@@ -75,7 +75,6 @@ Fall 2017
 \item \texttt{ls}
 \item \texttt{mkdir 19}
 \item \texttt{ls}
-\item \texttt{19}
 \item \texttt{git clone git://git.yoctoproject.org/linux-yocto-3.19}
 \item \texttt{git status}
 \item \texttt{git add .}
@@ -101,7 +100,20 @@ Fall 2017
 \end{enumerate}
 
 \section{Flag Definitions}
-\noindent An explanation of each and every flag in the listed qemu command-line
+\noindent An explanation of each and every flag in the listed qemu command-line is below:
+\begin{description}
+\item [-gdb tcp::5519] this flag makes it so that we wait for a gdb connection on tcp::5519 before the VM runs.
+\item [-S] this flag makes it so that the CPU does not start at startup.
+\item [-nographic] this disables qemu's graphical output so that we can use qemu as a simple command line application.
+\item [-kernel arch/x86/boot/bzImage] this flag is to setup the kernel and specify the file to use for the kernel image.
+\item [-drive file=core-image-lsb-sdk-qemux86.ext4,if=virtio] this flag defines a new drive to use. We set the file and then the interface (in this case virtio) that the drive is connected to.
+\item [-enable-kvm] this flag enables full kernel-based virtual machine virtualization support.
+\item [-net none] this flag is used to create a new network interface card, when the flag isn’t used a single network interface card is created. So in this case we set the net to none so that no network interface card is created or used.
+\item [-usb] this flag enables the usb driver.
+\item [-localtime] this flag sets the rtc to local time.
+\item [--no-reboot] this flag tells the VM that it should exit instead of reboot.
+\item [--append "root=/dev/vda rw console=ttyS0 debug"] the append flag specifies the kernel command line characteristics.
+\end{description}
 
 \section{Concurrency Questions}
 \noindent\textbf{What do you think the main point of this assignment is?}
