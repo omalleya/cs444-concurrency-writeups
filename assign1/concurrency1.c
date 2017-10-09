@@ -92,8 +92,9 @@ int GetsRandomValueInDesiredRange(int *val, int shift, int add)
 
 void print_buffer()
 {
+    int i;
     printf("current buff: ");
-    for(int i=0; i<current_index; i++)
+    for(i=0; i<current_index; i++)
     {
         printf("[ num: %d, wait: %d ] ", buffer[i]->num, buffer[i]->wait);
     }
