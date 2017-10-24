@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 
+const int NUM_PHILOSOPHERS = 5;
+
 struct philosopher {
     int num;
     char* name;
@@ -15,9 +17,9 @@ struct philosopher {
 char* phil_names[] = {"Aristotle","Plato","Voltaire","blah","blah"};
 
 /*threads*/
-pthread_t phil_thread[5];
+pthread_t phil_thread[NUM_PHILOSOPHERS];
 /* mutex lock */
-pthread_mutex_t mutex[5];
+pthread_mutex_t mutex[NUM_PHILOSOPHERS];
 /* conditional vars */
 //pthread_cond_t cond[5];
 
@@ -33,7 +35,7 @@ void get_forks(struct philosopher *phil)
     if(pthread_mutex_lock(&mutex[phil->num]) != 0)
         printf("failed");
     //right fork lock
-    if(pthread_mutex_lock(&mutex[(phil->num+1)%5]) != 0)
+    if(pthread_mutex_lock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
         printf ("failed");
 }
 
@@ -49,7 +51,7 @@ void put_forks(struct philosopher *phil)
     if(pthread_mutex_unlock(&mutex[phil->num]) != 0)
         printf("failed");
     //right fork unlock
-    if(pthread_mutex_unlock(&mutex[(phil->num+1)%5]) != 0)
+    if(pthread_mutex_unlock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
         printf ("failed");
 }
 
@@ -73,7 +75,7 @@ void *loop(void *i)
 void init()
 {
     int i=0;
-    for(i=0; i<5; i++)
+    for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_mutex_init(&mutex[i], NULL);
         //pthread_cond_init(&cond[i]);
@@ -83,7 +85,7 @@ void init()
 void cleanup()
 {
     int i=0;
-    for(i=0; i<5; i++)
+    for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_mutex_destroy(&mutex[i]);
         //pthread_cond_destroy(&cond[i]);
@@ -94,10 +96,10 @@ int main()
 {
     printf("test");
     /*create philosophers */
-    struct philosopher *philosophers = malloc(sizeof(struct philosopher) * 5);
+    struct philosopher *philosophers = malloc(sizeof(struct philosopher) * NUM_PHILOSOPHERS);
 
     int i=0;
-    for(i=0; i<5; i++)
+    for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         philosophers[i].num = i;
         philosophers[i].name = phil_names[i];
@@ -109,14 +111,14 @@ int main()
     init();
 
     /*create threads and join*/
-    for(i=0; i<5; i++)
+    for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_create(&(phil_thread[i]),
             NULL,
             (void *) loop,
             (void *) &philosophers[i]);
     }
-    for(i=0; i<5; i++)
+    for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_join(phil_thread[i], NULL);
     }
