@@ -6,7 +6,7 @@
 #include <unistd.h>
 #include <string.h>
 
-const int NUM_PHILOSOPHERS = 5;
+#define NUM_PHILOSOPHERS 5
 
 struct philosopher {
     int num;
@@ -17,9 +17,9 @@ struct philosopher {
 char* phil_names[] = {"Aristotle","Plato","Voltaire","Galileo","Pythagoras"};
 
 /*threads*/
-pthread_t phil_thread[5];
+pthread_t phil_thread[NUM_PHILOSOPHERS];
 /* mutex lock */
-pthread_mutex_t mutex[5];
+pthread_mutex_t mutex[NUM_PHILOSOPHERS];
 /* conditional vars */
 //pthread_cond_t cond[5];
 
