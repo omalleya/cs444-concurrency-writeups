@@ -14,12 +14,12 @@ struct philosopher {
     char* state;
 };
 
-char* phil_names[] = {"Aristotle","Plato","Voltaire","blah","blah"};
+char* phil_names[] = {"Aristotle","Plato","Voltaire","Galileo","Pythagoras"};
 
 /*threads*/
-pthread_t phil_thread[NUM_PHILOSOPHERS];
+pthread_t phil_thread[5];
 /* mutex lock */
-pthread_mutex_t mutex[NUM_PHILOSOPHERS];
+pthread_mutex_t mutex[5];
 /* conditional vars */
 //pthread_cond_t cond[5];
 
@@ -33,10 +33,10 @@ void get_forks(struct philosopher *phil)
 {
     //left fork lock
     if(pthread_mutex_lock(&mutex[phil->num]) != 0)
-        printf("failed");
+        printf("failed to get left fork");
     //right fork lock
     if(pthread_mutex_lock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
-        printf ("failed");
+        printf ("failed to get right fork");
 }
 
 void eat()
@@ -59,15 +59,15 @@ void *loop(void *i)
 {
     struct philosopher *j = (struct philosopher*) i;
     //free(i);
-    // while(1)
-    // {
-        printf("philosopher %s is thinking", j->name);
-        // think();
-        // get_forks(j);
-        // printf("philosopher %d is eating", j);
-        // eat();
-        // put_forks(j);
-    // }
+    while(1)
+    {
+        printf("philosopher %s is thinking\n", j->name);
+        think();
+        get_forks(j);
+        printf("philosopher %s is eating\n", j->name);
+        eat();
+        put_forks(j);
+    }
     return(NULL);
         
 }
@@ -94,7 +94,6 @@ void cleanup()
 
 int main()
 {
-    printf("test");
     /*create philosophers */
     struct philosopher *philosophers = malloc(sizeof(struct philosopher) * NUM_PHILOSOPHERS);
 
