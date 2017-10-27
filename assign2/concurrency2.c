@@ -11,7 +11,6 @@
 struct philosopher {
     int num;
     char* name;
-    char* state;
 };
 
 char* phil_names[] = {"Aristotle","Plato","Voltaire","Galileo","Pythagoras"};
@@ -21,7 +20,6 @@ pthread_t phil_thread[NUM_PHILOSOPHERS];
 /* mutex lock */
 pthread_mutex_t mutex[NUM_PHILOSOPHERS];
 /* conditional vars */
-//pthread_cond_t cond[5];
 
 void think()
 {
@@ -49,10 +47,10 @@ void put_forks(struct philosopher *phil)
 {
     //left fork unlock
     if(pthread_mutex_unlock(&mutex[phil->num]) != 0)
-        printf("failed");
+        printf("failed to put down left fork");
     //right fork unlock
     if(pthread_mutex_unlock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
-        printf ("failed");
+        printf ("failed to put down right fork");
 }
 
 void *loop(void *i)
@@ -102,8 +100,6 @@ int main()
     {
         philosophers[i].num = i;
         philosophers[i].name = phil_names[i];
-        philosophers[i].state = "thinking";
-
     }
     
     /* initialize mutex and cond threads */
