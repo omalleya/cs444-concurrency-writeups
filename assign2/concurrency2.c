@@ -10,10 +10,11 @@ void get_forks(struct philosopher *phil)
 {
     //left fork lock
     if(pthread_mutex_lock(&mutex[phil->num]) != 0)
-        printf("failed to get left fork");
+        printf("failed to get left fork\n");
+        
     //right fork lock
     if(pthread_mutex_lock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
-        printf ("failed to get right fork");
+        printf ("failed to get right fork\n");
 }
 
 void eat()
@@ -26,10 +27,10 @@ void put_forks(struct philosopher *phil)
 {
     //left fork unlock
     if(pthread_mutex_unlock(&mutex[phil->num]) != 0)
-        printf("failed to put down left fork");
+        printf("failed to put down left fork\n");
     //right fork unlock
     if(pthread_mutex_unlock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
-        printf ("failed to put down right fork");
+        printf ("failed to put down right fork\n");
 }
 
 void *loop(void *i)
