@@ -15,6 +15,8 @@ void get_forks(struct philosopher *phil)
     //right fork lock
     if(pthread_mutex_lock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
         printf ("failed to get right fork\n");
+
+    fork_status();
 }
 
 void eat()
@@ -31,6 +33,8 @@ void put_forks(struct philosopher *phil)
     //right fork unlock
     if(pthread_mutex_unlock(&mutex[(phil->num+1) % NUM_PHILOSOPHERS]) != 0)
         printf ("failed to put down right fork\n");
+
+    fork_status();
 }
 
 void *loop(void *i)
@@ -39,6 +43,7 @@ void *loop(void *i)
     //free(i);
     while(1)
     {
+        printf("%s num: %d\n", j->name, j->num);
         printf("philosopher %s is thinking\n", j->name);
         think();
         get_forks(j);
@@ -48,6 +53,26 @@ void *loop(void *i)
     }
     return(NULL);
         
+}
+
+void fork_status()
+{
+    int i=0;
+    printf("FORK STATUS: \n");
+    for(i=0; i<5; i++) {
+        if(pthread_mutex_trylock(&mutex[i]) == 0)
+        {
+            //lock was successful
+            pthread_mutex_unlock(&mutex[i]);
+            printf("[%d available] ", i);
+        }
+        else
+        {
+            printf("[%d in use] ", i);
+            //someone else holds the lock
+        }
+    }
+    printf("\n");
 }
 
 void init()

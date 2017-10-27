@@ -26,3 +26,4 @@ void put_forks(struct philosopher *);
 void *loop(void *);
 void init();
 void cleanup();
+void fork_status();
