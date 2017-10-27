@@ -1,25 +1,4 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
-#include <semaphore.h>
-#include <pthread.h>
-#include <unistd.h>
-#include <string.h>
-
-#define NUM_PHILOSOPHERS 5
-
-struct philosopher {
-    int num;
-    char* name;
-};
-
-char* phil_names[] = {"Aristotle","Plato","Voltaire","Galileo","Pythagoras"};
-
-/*threads*/
-pthread_t phil_thread[NUM_PHILOSOPHERS];
-/* mutex lock */
-pthread_mutex_t mutex[NUM_PHILOSOPHERS];
-/* conditional vars */
+#include "concurrency2.h"
 
 void think()
 {
@@ -76,7 +55,6 @@ void init()
     for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_mutex_init(&mutex[i], NULL);
-        //pthread_cond_init(&cond[i]);
     }
 }
 
@@ -86,40 +64,5 @@ void cleanup()
     for(i=0; i<NUM_PHILOSOPHERS; i++)
     {
         pthread_mutex_destroy(&mutex[i]);
-        //pthread_cond_destroy(&cond[i]);
     }
-}
-
-int main()
-{
-    /*create philosophers */
-    struct philosopher *philosophers = malloc(sizeof(struct philosopher) * NUM_PHILOSOPHERS);
-
-    int i=0;
-    for(i=0; i<NUM_PHILOSOPHERS; i++)
-    {
-        philosophers[i].num = i;
-        philosophers[i].name = phil_names[i];
-    }
-    
-    /* initialize mutex and cond threads */
-    init();
-
-    /*create threads and join*/
-    for(i=0; i<NUM_PHILOSOPHERS; i++)
-    {
-        pthread_create(&(phil_thread[i]),
-            NULL,
-            (void *) loop,
-            (void *) &philosophers[i]);
-    }
-    for(i=0; i<NUM_PHILOSOPHERS; i++)
-    {
-        pthread_join(phil_thread[i], NULL);
-    }
-
-    /* cleanup */
-    cleanup();
-
-    return 0;
 }
