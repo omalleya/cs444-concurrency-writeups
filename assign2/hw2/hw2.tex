@@ -1,0 +1,122 @@
+\documentclass[10pt,letterpaper,draftclsnofoot,onecolumn]{IEEEtran}
+
+\usepackage{graphicx}                                        
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+%\usepackage{pstricks, pst-node}
+
+\usepackage{geometry}
+\geometry{margin=0.75in}
+
+%random comment
+
+\newcommand{\cred}[1]{{\color{red}#1}}
+\newcommand{\cblue}[1]{{\color{blue}#1}}
+
+\newcommand{\toc}{\tableofcontents}
+
+\usepackage{hyperref}
+
+\def\name{Will Sims, Aidan O'Malley}
+
+%pull in the necessary preamble matter for pygments output
+%\input{pygments.tex}
+
+%% The following metadata will show up in the PDF properties
+\hypersetup{
+   colorlinks = false,
+   urlcolor = black,
+   pdfauthor = {\name},
+   pdfkeywords = {cs444},
+   pdftitle = {CS 444 Project 2: I/O Elevators},
+   pdfsubject = {CS 444 Project 2},
+   pdfpagemode = UseNone
+}
+
+\parindent = 0.0 in
+\parskip = 0.1 in
+
+\begin{document}
+
+%input the pygmentized output of mt19937ar.c, using a (hopefully) unique name
+%this file only exists at compile time. Feel free to change that.
+
+\begin{titlepage}
+\title{CS 444 Project 2: I/O Elevators}
+\author
+{\IEEEauthorblockN{Will Sims, Aidan O'Malley\\
+}
+\IEEEauthorblockA{
+CS 444\\
+Fall 2017
+}}
+    \maketitle
+    \vspace{2cm}
+    \begin{abstract}
+        \noindent This document contains our write-up for Project 1 of Operating Systems II. Included is a list of log commands to setup our kernel, definitions of the flags used, solutions to the concurrency questions, a version control log, and work log. 
+    \end{abstract}
+
+\end{titlepage}
+
+\section{Design for CLOOK Algorithm}
+\noindent{}
+
+\section{Kernel Questions}
+
+\noindent\textbf{What do you think the main point of this assignment is?}
+
+\indent{}
+
+\noindent\textbf{How did you personally approach the problem?}
+
+\indent{}
+
+\noindent\textbf{How did you ensure your solution was correct?}
+
+\indent{}
+
+\noindent\textbf{What did you learn?}
+
+\indent{}
+
+\noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
+\begin{description}
+\item [Step 1] Blah.
+
+
+\end{description}
+
+
+\section{Version Control Log}
+\noindent Table from repo logs:
+
+\noindent \textbf{Note: } The concurrency portion of the assignment was done using paired programming without a central repo so a few commits don't have links. They do, however, accurately reflect how we completed that portion of the assignment.
+\begin{center}
+    \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
+    \hline
+    Commit Link & Author & Commit Message \\ \hline
+    \end{tabular}
+\end{center}
+
+\section{Work Log}
+\noindent What work was done and when:
+\begin{description}
+\item [10/23/17] Met at Allan Bros for 2 hours and created skeleton for the dining philosophers problem.
+
+
+\end{description}
+
+\bibliography{project1}
+\bibliographystyle{IEEEtran}
+
+\end{document}
