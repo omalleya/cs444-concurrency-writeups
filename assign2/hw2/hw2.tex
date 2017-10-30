@@ -63,7 +63,7 @@ Fall 2017
     \maketitle
     \vspace{2cm}
     \begin{abstract}
-        \noindent This document contains our write-up for Project 1 of Operating Systems II. Included is a list of log commands to setup our kernel, definitions of the flags used, solutions to the concurrency questions, a version control log, and work log. 
+        \noindent This document contains our write-up for Project 2 of Operating Systems II. Included is the design for our CLOOK algorithm, a version control log, work log and responses to the main write-up questions. 
     \end{abstract}
 
 \end{titlepage}
@@ -71,15 +71,40 @@ Fall 2017
 \section{Design for CLOOK Algorithm}
 \noindent{}
 
-\section{Kernel Questions}
+\section{Version Control Log}
+\noindent Table from repo logs:
+
+\begin{center}
+    \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
+    \hline
+    Commit Link & Author & Commit Message \\ \hline
+    \end{tabular}
+\end{center}
+
+\section{Work Log}
+\noindent What work was done and when:
+\begin{description}
+\item [10/23/17] Met at Allan Bros for 2 hours and created skeleton for the dining philosophers problem with paired programming.
+\item [10/25/17] Aidan worked remotely and finished the dining philosophers concurrecy.
+\item [10/26/17] Will wrote a test suite for the dining philosophers problem.
+\item [10/27/17] Aidan fixed bugs in test suite.
+\item [10/27/17] Will added readme and submitted concurrency 2.
+\item [10/29/17] Planned out kernel assignment and researched scheduling algorithms for 3 hours.
+\item [10/29/17] Used paired programming and began implementing the CLOOK algorithm.
+\item [10/29/17] Created Latex file for writeup and began answering early questions.
+\item [10/30/17] Met at Johnson Hall to finish CLOOK implementation, updated Makefile and Kconfig.ioshed file.
+
+\end{description}
+
+\section{Questions}
 
 \noindent\textbf{What do you think the main point of this assignment is?}
 
-\indent{}
+\indent{The main point of this assignment is learn about different scheduling algorithms and how to implement them in the Linux kernel. The current FIFO (no-op) implementation takes all incoming requests and places them at the end of the queue. The requests are served in the order that they were recieved. However, there are more effective scheduling algorithms such as elevator algorithms which services requests in one direction until it reaches the end of the disk. After the end is reached, the direction is reversed and the same process is repeated. For this assignment, we implemented the C-LOOK algorithm which sweeps from either inside or outside and when the edge of the disk is reached, the head jumps to the other end and services requests in the same direction.}
 
 \noindent\textbf{How did you personally approach the problem?}
 
-\indent{}
+\indent{We approched this problem by first researching different scheduling algorithms such as LOOK and CLOOK implementations\cite{dsa}.}
 
 \noindent\textbf{How did you ensure your solution was correct?}
 
@@ -96,27 +121,7 @@ Fall 2017
 
 \end{description}
 
-
-\section{Version Control Log}
-\noindent Table from repo logs:
-
-\noindent \textbf{Note: } The concurrency portion of the assignment was done using paired programming without a central repo so a few commits don't have links. They do, however, accurately reflect how we completed that portion of the assignment.
-\begin{center}
-    \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
-    \hline
-    Commit Link & Author & Commit Message \\ \hline
-    \end{tabular}
-\end{center}
-
-\section{Work Log}
-\noindent What work was done and when:
-\begin{description}
-\item [10/23/17] Met at Allan Bros for 2 hours and created skeleton for the dining philosophers problem.
-
-
-\end{description}
-
-\bibliography{project1}
+\bibliography{hw2}
 \bibliographystyle{IEEEtran}
 
 \end{document}
