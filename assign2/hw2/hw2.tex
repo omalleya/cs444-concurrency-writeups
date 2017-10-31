@@ -69,7 +69,7 @@ Fall 2017
 \end{titlepage}
 
 \section{Design for CLOOK Algorithm}
-\noindent{We knew that we would only need to modify the add and dispatcher functions since we are starting with the FIFO implementation. One of the sorts is already accomplished in the dispactcher and requests are merged as well.}
+\noindent{Our plan of action for this assignment was mainly to change the add_request function of the FIFO scheduler. Most of the other functionality could be kept the same as in the FIFO scheduler implementation if the CLOOK request queue is set up correctly. We decided first that we’d need to set a diskhead variable when we first dispatch a request to know where the diskhead is currently, the diskhead location is a main difference between CLOOK and FIFO since CLOOK is an elevator algorithm. We then use that diskhead value to figure out where to insert new requests into the CLOOK request queue. In the add_request function, by using the diskhead variable and by comparing the sector location of the new request with the sector locations of the requests already in the CLOOK queue, we can make a queue that is circular. The scheduler will dispatch correctly with regards to the CLOOK algorithm even though we use FIFO functions for the rest of the implementation (for the most part).}
 
 \section{Version Control Log}
 \noindent Table from repo logs:
