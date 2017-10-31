@@ -69,7 +69,7 @@ Fall 2017
 \end{titlepage}
 
 \section{Design for CLOOK Algorithm}
-\noindent{}
+\noindent{We knew that we would only need to modify the add and dispatcher functions since we are starting with the FIFO implementation. One of the sorts is already accomplished in the dispactcher and requests are merged as well.}
 
 \section{Version Control Log}
 \noindent Table from repo logs:
@@ -78,6 +78,12 @@ Fall 2017
     \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
     \hline
     Commit Link & Author & Commit Message \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/3f942907cd1aef64215014b8296081002eeedc8e}{3f942907cd1aef64215014b8296081002eeedc8e} & William Sims & Added to latex and created IO python script \\ \hline
+    52703a0cbda4da1a56f5d784e7dc5acad19a40b0 & omalleya & reinitialize \\ \hline
+    fa180fbb15299647724e7adb8d56295e86466c5c & omalleya & adds changes to sstf-iosched add request function to start implementing c look algorithm \\ \hline
+    476bce90488ee059258115d312b2e7c2887a81eb & William Sims & {implements random number generation \newline  Updated Kconfig and Makefile to use CLOOK implementation} \\ \hline
+    e14dd5e9392a891ac909ae5f4cf21bee8ca1a6c9 & omalleya & finishes implementing clook, all changes were made in dispatch and add functions \\ \hline
+    2ed03bbcc05d3b87d95d1c10ea9d60a1e0113794 & William Sims & Added description to CLOOK scheduler \\ \hline
     \end{tabular}
 \end{center}
 
@@ -100,7 +106,7 @@ Fall 2017
 
 \noindent\textbf{What do you think the main point of this assignment is?}
 
-\indent{The main point of this assignment is learn about different scheduling algorithms and how to implement them in the Linux kernel. The current FIFO (no-op) implementation takes all incoming requests and places them at the end of the queue. The requests are served in the order that they were recieved. However, there are more effective scheduling algorithms such as elevator algorithms which services requests in one direction until it reaches the end of the disk. After the end is reached, the direction is reversed and the same process is repeated. For this assignment, we implemented the C-LOOK algorithm which sweeps from either inside or outside and when the edge of the disk is reached, the head jumps to the other end and services requests in the same direction.}
+\indent{The main point of this assignment is learn about different scheduling algorithms and how to implement them in the Linux kernel. The current FIFO (also known as no-op) implementation takes all incoming requests and places them at the end of the queue. The requests are served in the order that they were recieved. However, there are more effective scheduling algorithms such as elevator algorithms which services requests in one direction until it reaches the end of the disk. After the end is reached, the direction is reversed and the same process is repeated. For this assignment, we implemented the C-LOOK algorithm which sweeps from either inside or outside and when the edge of the disk is reached, the head jumps to the other end and services requests in the same direction.}
 
 \noindent\textbf{How did you personally approach the problem?}
 
@@ -116,8 +122,24 @@ Fall 2017
 
 \noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
 \begin{description}
-\item [Step 1] Blah.
-
+\item [Step: 1] START FROM CLEAN linux-yocto v3.19.2
+\item [Step: 2] git apply assign2.patch
+\item [Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux
+\item [Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 <top of linux tree> \newline //copy driver file if not inside already
+\item [Step: 5] cp /scratch/files/config-3.19.2-yocto-standard <top of linux tree> \newline//copy config if not inside already
+\item [Step: 6] make menuconfig
+\item [Step: 7] General Setup
+\item [Step: 8] Change local version name to “-group-19”
+\item [Step: 9] Save and Exit
+\item [Step: 10] make -j4 all \newline //build kernel \newline //select clook scheduler here or after starting VM run below command in VM
+\item [Step: 11] echo clook > /sys/block/hda/queue/scheduler
+\item [Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"
+\item [Step: 13] \$GDB \newline //From another terminal
+\item [Step: 14] target remote :5519
+\item [Step: 15] continue
+\item [Step: 16] Login to VM as root
+\item [Step: 17] dd if=/dev/urandom of=./test\_data\_1 bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output. 
+\item [Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations
 
 \end{description}
 
