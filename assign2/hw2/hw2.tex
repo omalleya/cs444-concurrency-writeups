@@ -69,7 +69,7 @@ Fall 2017
 \end{titlepage}
 
 \section{Design for CLOOK Algorithm}
-\noindent{Our plan of action for this assignment was mainly to change the add_request function of the FIFO scheduler. Most of the other functionality could be kept the same as in the FIFO scheduler implementation if the CLOOK request queue is set up correctly. We decided first that we’d need to set a diskhead variable when we first dispatch a request to know where the diskhead is currently, the diskhead location is a main difference between CLOOK and FIFO since CLOOK is an elevator algorithm. We then use that diskhead value to figure out where to insert new requests into the CLOOK request queue. In the add_request function, by using the diskhead variable and by comparing the sector location of the new request with the sector locations of the requests already in the CLOOK queue, we can make a queue that is circular. The scheduler will dispatch correctly with regards to the CLOOK algorithm even though we use FIFO functions for the rest of the implementation (for the most part).}
+\noindent{Our plan of action for this assignment was mainly to change the add\_request function of the FIFO scheduler. Most of the other functionality could be kept the same as in the FIFO scheduler implementation if the CLOOK request queue is set up correctly. We decided first that we’d need to set a diskhead variable when we first dispatch a request to know where the diskhead is currently, the diskhead location is a main difference between CLOOK and FIFO since CLOOK is an elevator algorithm. We then use that diskhead value to figure out where to insert new requests into the CLOOK request queue. In the add\_request function, by using the diskhead variable and by comparing the sector location of the new request with the sector locations of the requests already in the CLOOK queue, we can make a queue that is circular. The scheduler will dispatch correctly with regards to the CLOOK algorithm even though we use FIFO functions for the rest of the implementation (for the most part).}
 
 \section{Version Control Log}
 \noindent Table from repo logs:
@@ -110,15 +110,15 @@ Fall 2017
 
 \noindent\textbf{How did you personally approach the problem?}
 
-\indent{We approched this problem by first researching different scheduling algorithms such as LOOK and CLOOK implementations\cite{dsa}.}
+\indent{We approched this problem by first researching different scheduling algorithms such as LOOK and CLOOK implementations\cite{dsa}. We then thought about how these algorithms differed from the FIFO scheduler. After considering the similarities and differences between the two schedulers, we made our plan of action for CLOOK (see the design section earlier). We then implemented this plan.}
 
 \noindent\textbf{How did you ensure your solution was correct?}
 
-\indent{}
+\indent{We ensured our solution was correct by using print statements in our scheduler code and running "dd if=/dev/urandom of=./clook\_test bs=1024 count=8192" which writes random data to the disk. We also did other simple IO operations such as making directories and test files. After observing the printed queue, the requests were in sorted order and matched expected CLOOK output which made us confident that our solution is correct.}
 
 \noindent\textbf{What did you learn?}
 
-\indent{}
+\indent{We learned how FIFO, CLOOK, and LOOK schedulers are implemented. We also learned how to tell qemu what scheduler to use, how to create and select a scheduler, and how to create a linux patch.}
 
 \noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
 \begin{description}
@@ -138,7 +138,7 @@ Fall 2017
 \item \texttt{[Step: 14] target remote :5519}
 \item \texttt{[Step: 15] continue}
 \item \texttt{[Step: 16] Login to VM as root}
-\item \texttt{[Step: 17] dd if=/dev/urandom of=./test\_data\_1 bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output.} 
+\item \texttt{[Step: 17] dd if=/dev/urandom of=./clook\_test bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output.} 
 \item \texttt{[Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations}
 
 \end{description}
