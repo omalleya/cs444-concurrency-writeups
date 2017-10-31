@@ -122,24 +122,24 @@ Fall 2017
 
 \noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
 \begin{description}
-\item [Step: 1] START FROM CLEAN linux-yocto v3.19.2
-\item [Step: 2] git apply assign2.patch
-\item [Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux
-\item [Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 <top of linux tree> \newline //copy driver file if not inside already
-\item [Step: 5] cp /scratch/files/config-3.19.2-yocto-standard <top of linux tree> \newline//copy config if not inside already
-\item [Step: 6] make menuconfig
-\item [Step: 7] General Setup
-\item [Step: 8] Change local version name to “-group-19”
-\item [Step: 9] Save and Exit
-\item [Step: 10] make -j4 all \newline //build kernel \newline //select clook scheduler here or after starting VM run below command in VM
-\item [Step: 11] echo clook > /sys/block/hda/queue/scheduler
-\item [Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"
-\item [Step: 13] \$GDB \newline //From another terminal
-\item [Step: 14] target remote :5519
-\item [Step: 15] continue
-\item [Step: 16] Login to VM as root
-\item [Step: 17] dd if=/dev/urandom of=./test\_data\_1 bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output. 
-\item [Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations
+\item \texttt{[Step: 1] START FROM CLEAN linux-yocto v3.19.2}
+\item \texttt{[Step: 2] git apply assign2.patch}
+\item \texttt{[Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux}
+\item \texttt{[Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 *top of linux tree* \newline //copy driver file if not inside already}
+\item \texttt{[Step: 5] cp /scratch/files/config-3.19.2-yocto-standard *top of linux tree* \newline//copy config if not inside already}
+\item \texttt{[Step: 6] make menuconfig}
+\item \texttt{[Step: 7] General Setup}
+\item \texttt{[Step: 8] Change local version name to “-group-19”}
+\item \texttt{[Step: 9] Save and Exit}
+\item \texttt{[Step: 10] make -j4 all \newline //build kernel \newline //select clook scheduler here or after starting VM run below command in VM}
+\item \texttt{[Step: 11] echo clook > /sys/block/hda/queue/scheduler}
+\item \texttt{[Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
+\item \texttt{[Step: 13] \$GDB \newline //From another terminal}
+\item \texttt{[Step: 14] target remote :5519}
+\item \texttt{[Step: 15] continue}
+\item \texttt{[Step: 16] Login to VM as root}
+\item \texttt{[Step: 17] dd if=/dev/urandom of=./test\_data\_1 bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output.} 
+\item \texttt{[Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations}
 
 \end{description}
 
