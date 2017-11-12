@@ -1,0 +1,140 @@
+\documentclass[10pt,letterpaper,draftclsnofoot,onecolumn]{IEEEtran}
+
+\usepackage{graphicx}                                        
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+%\usepackage{pstricks, pst-node}
+
+\usepackage{geometry}
+\geometry{margin=0.75in}
+
+%random comment
+
+\newcommand{\cred}[1]{{\color{red}#1}}
+\newcommand{\cblue}[1]{{\color{blue}#1}}
+
+\newcommand{\toc}{\tableofcontents}
+
+\usepackage{hyperref}
+
+\def\name{Will Sims, Aidan O'Malley}
+
+%pull in the necessary preamble matter for pygments output
+%\input{pygments.tex}
+
+%% The following metadata will show up in the PDF properties
+\hypersetup{
+   colorlinks = false,
+   urlcolor = black,
+   pdfauthor = {\name},
+   pdfkeywords = {cs444},
+   pdftitle = {CS 444 Project 3: Encrypted Block Device},
+   pdfsubject = {CS 444 Project 3},
+   pdfpagemode = UseNone
+}
+
+\parindent = 0.0 in
+\parskip = 0.1 in
+
+\begin{document}
+
+%input the pygmentized output of mt19937ar.c, using a (hopefully) unique name
+%this file only exists at compile time. Feel free to change that.
+
+\begin{titlepage}
+\title{CS 444 Project 3: Encrypted Block Device}
+\author
+{\IEEEauthorblockN{Will Sims, Aidan O'Malley\\
+}
+\IEEEauthorblockA{
+CS 444\\
+Fall 2017
+}}
+    \maketitle
+    \vspace{2cm}
+    \begin{abstract}
+        \noindent 
+    \end{abstract}
+
+\end{titlepage}
+
+\section{Design for Encrypted Block Device}
+\noindent{}
+
+\section{Version Control Log}
+\noindent Table from repo logs:
+
+\begin{center}
+    \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
+    \hline
+    Commit Link & Author & Commit Message \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/3f942907cd1aef64215014b8296081002eeedc8e}{3f942907cd1aef64215014b8296081002eeedc8e} & William Sims & Added to latex and created IO python script \\ \hline
+    52703a0cbda4da1a56f5d784e7dc5acad19a40b0 & omalleya & reinitialize \\ \hline
+    67e8554c6e400cb582486fe8c9141b15576443b0 & omalleya & creates simple block driver file in drivers/blocks/ and creates file skeleton \\ \hline
+    a310be6ef0dd5e39fc01c53fa17edff8260f0210 & William Sims & adds simple block driver structure without encryption \\ \hline
+
+    \end{tabular}
+\end{center}
+
+\section{Work Log}
+\noindent What work was done and when:
+\begin{description}
+\item [11/11/17] Met at Johnson Hall at 2:00
+
+\end{description}
+
+\section{Questions}
+
+\noindent\textbf{What do you think the main point of this assignment is?}
+
+\indent{}
+
+\noindent\textbf{How did you personally approach the problem?}
+
+\indent{}
+
+\noindent\textbf{How did you ensure your solution was correct?}
+
+\indent{}
+
+\noindent\textbf{What did you learn?}
+
+\indent{}
+
+\noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
+\begin{description}
+\item \texttt{[Step: 1] START FROM CLEAN linux-yocto v3.19.2}
+\item \texttt{[Step: 2] git apply assign3.patch}
+\item \texttt{[Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux}
+\item \texttt{[Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 *top of linux tree* \newline //copy driver file if not inside already}
+\item \texttt{[Step: 5] cp /scratch/files/config-3.19.2-yocto-standard *top of linux tree* \newline//copy config if not inside already}
+\item \texttt{[Step: 6] make menuconfig}
+\item \texttt{[Step: 7] General Setup}
+\item \texttt{[Step: 8] Change local version name to “-group-19”}
+\item \texttt{[Step: 9] Save and Exit}
+\item \texttt{[Step: 10] make -j4 all \newline //build kernel \newline //select clook scheduler here or after starting VM run below command in VM}
+\item \texttt{[Step: 11] echo clook > /sys/block/hda/queue/scheduler}
+\item \texttt{[Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
+\item \texttt{[Step: 13] \$GDB \newline //From another terminal}
+\item \texttt{[Step: 14] target remote :5519}
+\item \texttt{[Step: 15] continue}
+\item \texttt{[Step: 16] Login to VM as root}
+\item \texttt{[Step: 17] dd if=/dev/urandom of=./clook\_test bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output.} 
+\item \texttt{[Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations}
+
+\end{description}
+
+\bibliography{hw3}
+\bibliographystyle{IEEEtran}
+
+\end{document}
