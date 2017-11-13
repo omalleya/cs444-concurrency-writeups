@@ -69,7 +69,7 @@ Fall 2017
 \end{titlepage}
 
 \section{Design for Encrypted Block Device}
-\noindent{}
+\noindent{Plan goes here}
 
 \section{Version Control Log}
 \noindent Table from repo logs:
@@ -82,14 +82,22 @@ Fall 2017
     52703a0cbda4da1a56f5d784e7dc5acad19a40b0 & omalleya & reinitialize \\ \hline
     67e8554c6e400cb582486fe8c9141b15576443b0 & omalleya & creates simple block driver file in drivers/blocks/ and creates file skeleton \\ \hline
     a310be6ef0dd5e39fc01c53fa17edff8260f0210 & William Sims & adds simple block driver structure without encryption \\ \hline
-
+    85f0afa78e7c4a8c2f6a1cba496af4659fd83868 & omalleya & adds cipher initialization with key set up as well \\ \hline
+    a78a861183eb7fc0d0540e0c489e13cf4bfd2a6e & omalleya & encrypts and decrypts data in transfer function \\ \hline
+    041df9cabd16e0db54f1e695b7646d35b1354c79 & omalleya & adds key as module parameter \\ \hline
+    fc01bd1245f73de1126d03d3fb4a28f54263ecd1 & omalleya & removes key from device structure since it is a global variable \\ \hline
+    07e987ab34910de4990e81b1eaf0456ee2066adf & William Sims & updated Kconfig and Makefile \\ \hline
+    a7ca4e8de175540eb76f24bcbfbc076335940d9c & smaller changes to sbd.c to get module to work inside of VM \\ \hline
     \end{tabular}
 \end{center}
 
 \section{Work Log}
 \noindent What work was done and when:
 \begin{description}
-\item [11/11/17] Met at Johnson Hall at 2:00
+\item [11/11/17] Met at Johnson Hall at 2:00 and worked until 6:00. Finished programming the embedded block device.
+\item [11/11/17] Stared latex write-up, added git and work log. 
+\item [11/12/17] Aidan figured out how to use scp to transfer the module to our virtual machine.
+\item [11/13/17] Added responses to assignment questions.
 
 \end{description}
 
