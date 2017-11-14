@@ -133,7 +133,10 @@ We also decided this is where we'd set the cipher key for the block cipher.
 
 \noindent\textbf{How did you ensure your solution was correct?}
 
-\indent{}
+\indent{We insured our solution was correct by static analysis first.
+We then built the device directly into qemu to debug and be sure that the device would actually run in the VM.
+After insuring this we loaded the device in as a module into the VM with scp and tested module parameters.
+The actual test commands we ran can be found in the section below title "How should the TA evaluate your work.}
 
 \noindent\textbf{What did you learn?}
 
@@ -149,16 +152,25 @@ We also decided this is where we'd set the cipher key for the block cipher.
 \item \texttt{[Step: 6] make menuconfig}
 \item \texttt{[Step: 7] General Setup}
 \item \texttt{[Step: 8] Change local version name to “-group-19”}
-\item \texttt{[Step: 9] Save and Exit}
-\item \texttt{[Step: 10] make -j4 all \newline //build kernel \newline //select clook scheduler here or after starting VM run below command in VM}
-\item \texttt{[Step: 11] echo clook > /sys/block/hda/queue/scheduler}
-\item \texttt{[Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net none -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
-\item \texttt{[Step: 13] \$GDB \newline //From another terminal}
-\item \texttt{[Step: 14] target remote :5519}
-\item \texttt{[Step: 15] continue}
-\item \texttt{[Step: 16] Login to VM as root}
-\item \texttt{[Step: 17] dd if=/dev/urandom of=./clook\_test bs=1024 count=8192 \newline //This will write random data to the disk and you should see the correct queue from the CLOOK output.} 
-\item \texttt{[Step: 18] run command “dmesg” if logging to console is not sufficient to view the CLOOK operations}
+\item \texttt{[Step: 9] Go back to first page of menuconfig and go to Device Drivers}
+\item \texttt{[Step: 10] Go to block devices and set Encrypted Block Device as a module}
+\item \texttt{[Step: 11] Save and Exit}
+\item \texttt{[Step: 12] make -j4 all \newline //build kernel}
+\item \texttt{[Step: 13] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net nic -net user,hostfwd=tcp::8080-:22 -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
+\item \texttt{[Step: 14] \$GDB \newline //From another terminal}
+\item \texttt{[Step: 15] target remote :5519}
+\item \texttt{[Step: 16] continue}
+\item \texttt{[Step: 17] scp -P 8080 ./drivers/block/sbd.ko root@localhost:~ \newline //From another terminal}
+\item \texttt{[Step: 18] Login to VM as root and test with the following}
+\item \texttt{[Step: 19] insmod sbd.ko key="1234567899"} 
+\item \texttt{[Step: 20] mkfs.ext2 /dev/sbd0}
+\item \texttt{[Step: 21] mkdir test}
+\item \texttt{[Step: 22] mount /dev/sbd0 ./test}
+\item \texttt{[Step: 23] echo ‘encrypt this message’ > ./test/encrypt}
+\item \texttt{[Step: 24] grep -a ‘encrypt’ /dev/sbd0}
+\item \texttt{[Step: 25] cat ./test/encrypt}
+\item \texttt{[Step: 26] umount ./test}
+\item \texttt{[Step: 27] rmmod sbd.ko}
 
 \end{description}
 
