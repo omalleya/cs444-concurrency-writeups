@@ -112,24 +112,24 @@ Fall 2017
 \indent{ Our plan was based largely off of the LWN.net implementation of a simple block driver.
 We knew that this block driver would be an adequate start and if we were able to add encryption to where the driver performed reads and writes we would have an acceptable driver. }
 
-Looking at the LWN.net implementation made it clear that we’d need transfer, request, and ioctl functions to perform device operations.
-We also knew we’d need an initialization and an exit function for those parts of a device’s lifecycle.
+Looking at the LWN.net implementation made it clear that we'd need transfer, request, and ioctl functions to perform device operations.
+We also knew we'd need an initialization and an exit function for those parts of a device's lifecycle.
 
-For the request function we decided it would make the most sense to check what kind of request we’re looking at.
-If it wasn’t a command then we skip it and continue looping through the queue, otherwise we send it to the transfer function which actually handles the request.
+For the request function we decided it would make the most sense to check what kind of request we're looking at.
+If it wasn't a command then we skip it and continue looping through the queue, otherwise we send it to the transfer function which actually handles the request.
 
-In the transfer function the main functionality we decided on was to check if we’re reading or writing data.
+In the transfer function the main functionality we decided on was to check if we're reading or writing data.
 This was going to come as a parameter to the function.
-We decided if we’re writing data we want to loop through the intended section of data and encrypt a block at a time from the request’s “buffer” and write that encrypted block to the device’s data member.
-If we are reading with the current request we want to loop through the intended section of data and decrypt a block at a time from the device’s data and write to the request’s buffer.
+We decided if we're writing data we want to loop through the intended section of data and encrypt a block at a time from the request's “buffer” and write that encrypted block to the device's data member.
+If we are reading with the current request we want to loop through the intended section of data and decrypt a block at a time from the device's data and write to the request's buffer.
 
 The ioctl function is used to set up the geometry of the device.
 
 The initialization function was the only other slightly complex function.
 We took most of the initialization from the LWN.net implementation such as setting up the device with a spin lock, allocating memory, getting the request queue, registering the device, and setting up the Gendisk structure.
 We also added code to the initialization to set up the encryption and decryption of the disk.
-For this we decided we needed to allocate an AES crypto cipher and set that to a member of the device’s structure for use in the transfer function.
-We also decided this is where we’d set the cipher key for the block cipher.
+For this we decided we needed to allocate an AES crypto cipher and set that to a member of the device's structure for use in the transfer function.
+We also decided this is where we'd set the cipher key for the block cipher.
 
 \noindent\textbf{How did you ensure your solution was correct?}
 
