@@ -18,8 +18,9 @@ int active = 0;
 int waiting = 0;
 int must_wait = 0;
 
-void *use_resource(void *i) {
-    int id = *((int *) i);
+//Reference: https://pdfs.semanticscholar.org/93af/99143f8123032fbcc805656d63617a2268ab.pdf
+void *use_resource(void *num) {
+    int id = *((int *) num);
     
     while(1){
         sem_wait(&mutex);
@@ -34,7 +35,7 @@ void *use_resource(void *i) {
             sem_post(&mutex);
         }
 
-        printf("Thread %d is sharing the resource.\n", id);
+        printf("Thread %d is using the resource.\n", id);
         int wait = (rand() % 5) + 2;
         sleep(wait);
 
@@ -66,11 +67,13 @@ void *use_resource(void *i) {
 
 int main() {
     sem_init(&mutex, 0, 3);
-	sem_init(&block, 0, 0);  
+    sem_init(&block, 0, 0);  
 
     int i=0;
     for(i=0; i < THREAD_MAX; i++){
-        pthread_create(&threads[i], NULL, use_resource, &i);
+        int *num = malloc(sizeof(int)); 
+	*num = i;
+        pthread_create(&threads[i], NULL, use_resource, num);
     }
 
     for (i = 0; i < THREAD_MAX; i++){
