@@ -23,6 +23,8 @@ void *delete(void *i)
         printf("%d delete thread deleting\n", *id);
         num_deleting = 1;
 
+        sleep(rand() % 5);
+
         // deletes head
         if(random_element == 0 && head != NULL)
         {
@@ -93,6 +95,7 @@ void *insert(void *i)
         printf("%d insert thread inserting\n", *id);
 
         srand(time(NULL));
+        sleep(rand() % 5);
         struct node *new_node = malloc(sizeof(struct node));
         new_node->data = rand() % 20;
         new_node->next = NULL;
@@ -125,6 +128,7 @@ void *search(void *i)
         printf("%d search thread searching\n", *id);
 
         srand(time(NULL));
+        sleep(rand() % 5);
         int random_element = rand() % 20;
         int found = 0;
 
@@ -203,9 +207,11 @@ int main()
     int i=0;
     for(i=0; i < THREAD_MAX; i++)
     {
-        pthread_create(&ins[i], NULL, insert, &i);
-        pthread_create(&sea[i], NULL, search, &i);
-        pthread_create(&del[i], NULL, delete, &i);
+        int *num = malloc(sizeof(int));
+        *num = i;
+        pthread_create(&ins[i], NULL, insert, num);
+        pthread_create(&sea[i], NULL, search, num);
+        pthread_create(&del[i], NULL, delete, num);
     }
 
     for (i = 0; i < THREAD_MAX; i++)
