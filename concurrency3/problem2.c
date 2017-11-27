@@ -4,29 +4,37 @@ struct node *list_head;
 
 void *delete(void *i)
 {
-
+    // get thread's id
     int *id = (int *) i;
-    // while(1)
-    // {
+
+    // if there's only the head, we don't delete
+    if(total_count > 1)
+    {
+        // lock the rw lock for writing, this waits until all rd threads finish
+        pthread_rwlock_wrlock(&lock);
+
         struct node *head = list_head;
         struct node *temp;
 
-        int random_element = rand() % LIST_SIZE-1;
+        // get random element to remove
+        srand(time(NULL));
+        int random_element = rand() % (total_count-1);
 
-        if(total_count > 1 && !num_inserting && !num_searching && !num_deleting)
+        printf("%d delete thread deleting\n", *id);
+        num_deleting = 1;
+
+        // deletes head
+        if(random_element == 0 && head != NULL)
         {
-            pthread_rwlock_wrlock(&lock);
-
-            printf("%d delete thread deleting\n", *id);
-            num_deleting = 1;
-
-            if(random_element == 0)
-            {
-                temp = head->next;
-                free(head);
-                list_head = temp;
-            } 
-            else if(random_element == LIST_SIZE-1)
+            temp = head->next;
+            free(list_head);
+            list_head = temp;
+            total_count--;
+        } 
+        // deletes tail
+        else if(random_element == total_count-1)
+        {
+            if(total_count > 2)
             {
                 while(head->next->next != NULL)
                 {
@@ -35,113 +43,115 @@ void *delete(void *i)
                 temp = head->next;
                 head->next = NULL;
                 free(temp);
-            } 
-            else {
-                int i=0;
-                for(i=0; i<random_element; i++)
-                {
-                    head = head->next;
-                }
+                total_count--;
+            } else {
+                temp = head->next;
+                head->next = NULL;
+                free(temp);
+                total_count--;
+            }
+            
+        } 
+        //deletes inner element
+        else {
+            int i=0;
+            for(i=0; i<random_element; i++)
+            {
+                head = head->next;
+            }
 
+            if(head->next != NULL)
+            {
                 temp = head->next;
                 head->next = temp->next;
                 free(temp);
+            } else {
+                free(head->next);
+                head->next = NULL;
             }
 
             total_count--;
-            num_deleting = 0;
-            pthread_rwlock_unlock(&lock);
-            printf("%d delete thread ended\n", *id);
         }
-    //}
+
+        num_deleting = 0;
+        pthread_rwlock_unlock(&lock);
+    }
+    printf("%d delete thread ended\n", *id);
     
 }
 
 void *insert(void *i)
 {
     int *id = (int *) i;
-    // while(1)
-    // {
 
-        if(!num_inserting)
+    if(!num_inserting)
+    {
+        pthread_rwlock_rdlock(&lock);
+        pthread_mutex_lock(&i_lock);
+
+        num_inserting++;
+        printf("%d insert thread inserting\n", *id);
+
+        srand(time(NULL));
+        struct node *new_node = malloc(sizeof(struct node));
+        new_node->data = rand() % 20;
+        new_node->next = NULL;
+
+        struct node *head = list_head;
+
+        while(head->next != NULL)
         {
-            pthread_rwlock_rdlock(&lock);
-            pthread_mutex_lock(&i_lock);
-
-            printf("%d insert thread inserting\n", *id);
-
-            num_inserting++;
-
-            if(num_inserting == 1)
-            {
-                srand(time(NULL));
-                struct node *new_node = malloc(sizeof(struct node));
-                new_node->data = rand() % 20;
-                new_node->next = NULL;
-
-                struct node *head = list_head;
-
-                if(head == NULL)
-                {
-                    head = new_node;
-                } else {
-                    int i=0;
-                    while(head->next != NULL)
-                    {
-                        head = head->next;
-                    }
-                    head->next = new_node;
-                }
-
-                total_count++;
-            }
-
-            num_inserting--;
-            pthread_mutex_unlock(&i_lock);
-            pthread_rwlock_unlock(&lock);
-            printf("%d insert thread ended\n", *id);
+            head = head->next;
         }
-    //}
+        head->next = new_node;
+
+        total_count++;
+
+        num_inserting--;
+
+        pthread_mutex_unlock(&i_lock);
+        pthread_rwlock_unlock(&lock);
+    }
+    printf("%d insert thread ended\n", *id);
 }
 
 void *search(void *i)
 {
     int *id = (int *) i;
-    // while(1)
-    // {
-        if(!num_deleting)
+
+    if(!num_deleting)
+    {
+        pthread_rwlock_rdlock(&lock);
+        printf("%d search thread searching\n", *id);
+
+        srand(time(NULL));
+        int random_element = rand() % 20;
+        int found = 0;
+
+        struct node *head = list_head;
+
+        int i=0;
+        while(head != NULL)
         {
-            pthread_rwlock_rdlock(&lock);
-            printf("%d search thread searching\n", *id);
-
-            int random_element = rand() % 20;
-            int found = 0;
-
-            struct node *head = list_head;
-
-            int i=0;
-            while(head != NULL)
+            if(head->data == random_element)
             {
-                if(head->data == random_element)
-                {
-                    found = 1;
-                    break;
-                }
-                head = head->next;
+                found = 1;
+                break;
             }
-
-            if(found)
-            {
-                printf("element %d found in list\n", random_element);
-            }
-            else {
-                printf("element %d not found in list\n", random_element);
-            }
-
-            pthread_rwlock_unlock(&lock);
-            printf("%d search thread ended\n", *id);
+            head = head->next;
         }
-    //}
+
+        if(found)
+        {
+            printf("element %d found in list\n", random_element);
+        }
+        else {
+            printf("element %d not found in list\n", random_element);
+        }
+
+        pthread_rwlock_unlock(&lock);
+    }
+    printf("%d search thread ended\n", *id);
 }
 
 void create_random_list()
@@ -180,9 +190,9 @@ int main()
     srand(time(NULL));
 
     list_head = malloc(sizeof(struct node));
+    total_count = 0;
     create_random_list();
 
-    total_count = 1;
     num_searching = 0;
     num_inserting = 0;
     num_deleting = 0;
