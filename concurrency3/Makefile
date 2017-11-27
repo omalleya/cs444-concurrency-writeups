@@ -4,7 +4,7 @@ problem1:
 	gcc -lpthread problem1.c -o problem1
 
 problem2:
-	gcc -lpthread problem2.c -o problem2
+	gcc -lpthread -mrdrnd problem2.c -o problem2
 
 all: problem1 problem2
 

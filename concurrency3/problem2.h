@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <time.h>
+#include <x86intrin.h>
+#include "mt19937ar.c"
 
 #define LIST_SIZE 6
 #define THREAD_MAX 5
