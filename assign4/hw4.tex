@@ -166,24 +166,31 @@ Best-fit should use less memory because first-fit allocates memory from the fist
 \noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
 \begin{description}
 \item \texttt{[Step: 1] START FROM CLEAN linux-yocto v3.19.2}
-\item \texttt{[Step: 2] git apply assign3.patch}
+\item \texttt{[Step: 2] git apply assign4.patch}
 \item \texttt{[Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux}
 \item \texttt{[Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 *top of linux tree* \newline //copy driver file if not inside already}
 \item \texttt{[Step: 5] cp /scratch/files/config-3.19.2-yocto-standard *top of linux tree* \newline//copy config if not inside already}
 \item \texttt{[Step: 6] make menuconfig}
 \item \texttt{[Step: 7] General Setup}
 \item \texttt{[Step: 8] Change local version name to “-group-19”}
-\item \texttt{[Step: 9] Go back to first page of menuconfig and go to Device Drivers}
-\item \texttt{[Step: 10] Go to block devices and set Encrypted Block Device as a module}
-\item \texttt{[Step: 11] Save and Exit}
-\item \texttt{[Step: 12] make -j4 all \newline //build kernel}
-\item \texttt{[Step: 13] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net nic -net user,hostfwd=tcp::8080-:22 -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
-\item \texttt{[Step: 14] \$GDB \newline //From another terminal}
-\item \texttt{[Step: 15] target remote :5519}
-\item \texttt{[Step: 16] continue}
-\item \texttt{[Step: 17] scp -P 8080 ./test.c root@localhost:~ \newline //From another terminal}
-\item \texttt{[Step: 18] Login to VM as root and test with the following}
-
+\item \texttt{[Step: 9] From General Setup go to "Choose SLAB allocator" and select SLOB}
+\item \texttt{[Step: 10] Save and Exit}
+\item \texttt{[Step: 11] make -j4 all \newline //build kernel}
+\item \texttt{[Step: 12] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net nic -net user,hostfwd=tcp::8000-:22 -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
+\item \texttt{[Step: 13] \$GDB \newline //From another terminal}
+\item \texttt{[Step: 14] target remote :5519}
+\item \texttt{[Step: 15] continue}
+\item \texttt{[Step: 16] scp -P 8000 ./test.c root@localhost:~ \newline //From another terminal}
+\item \texttt{[Step: 17] scp -P 8000 ./test-2.c root@localhost:~}
+\item \texttt{[Step: 18] cd ./testmodule && make}
+\item \texttt{[Step: 19] scp -P 8000 ./test.ko root@localhost:~ \newline //transfers over module}
+\item \texttt{[Step: 20] Login to VM as root and test with the following}
+\item \texttt{[Step: 21] compile test.c files with gcc}
+\item \texttt{[Step: 22] run to see current memory usage}
+\item \texttt{[Step: 23] insmod test.ko \newline //loads module}
+\item \texttt{[Step: 24] run test files again to see memory usage}
+\item \texttt{[Step: 25] repeat steps for old slob by renaming mm/slob.c to mm/slob-new.c and renaming slob-old.c to slob.c}
+\item \texttt{[Step: 26] then run "make -j4 all" to reflect the changes to slob}
 \end{description}
 
 \bibliography{hw4}
