@@ -77,7 +77,9 @@ Fall 2017
     \maketitle
     \vspace{2cm}
     \begin{abstract}
-        \noindent This document contains the write-up for Project 4 of Operating Systems II.
+        \noindent This document contains the write-up for Project 4 of Operating Systems II. 
+        We modified an existing SLOB allocator implementation to use a best-fit algorithm. 
+
     \end{abstract}
 
 \end{titlepage}
@@ -85,8 +87,8 @@ Fall 2017
 \section{Design for SLOB SLAB}
 \noindent{The SLOB allocator is a small and efficient allocator that uses a first-fit algorithm for memory allocation.
 Before we started programming we first looked up documentation to understand the slob implementation and best-fit algorithms. 
-After viewing slob.c, we noticed that the slob\_page\_alloc() implements a first-fit algorithm to search for a page that has enough space for a new request.
-We plan to modify slob\_page\_alloc() and used this pseudocode as a reference for our best-fit algorithm: 
+After viewing slob.c, we noticed that the slob\_alloc() implements a first-fit algorithm to search for a page that has enough space for a new request.
+We plan to modify slob\_alloc() and used this pseudocode as a reference for our best-fit algorithm: 
 
 \lstset{language=C++,caption={Best-fit algorithm pseudocode\cite{bestfit}.}}
 \begin{lstlisting}
@@ -106,7 +108,6 @@ else
 
 Reference: https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html
 
-We also plan to modify slob\_alloc() so it selects the page in order of best fit before allocating the specific blocks. 
 }
 
 \section{Version Control Log}
@@ -116,7 +117,8 @@ We also plan to modify slob\_alloc() so it selects the page in order of best fit
     \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
     \hline
     Commit Link & Author & Commit Message \\ \hline
-    52703a0cbda4da1a56f5d784e7dc5acad19a40b0 & omalleya & reinitialize \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/1c1a0c751d5fe807aa23f82d29d99dda6977e900}{1c1a0c751d5fe807aa23f82d29d99dda6977e900} & William Sims & adds project 4 write-up \\ \hline
+    0ab81e85157f5ee29765150f8c76ab9fe850102e & omalleya & adds changes to slob\_alloc to implement best fit and create mem\_usage\ syscall \\ \hline
  
     \end{tabular}
 \end{center}
@@ -124,7 +126,7 @@ We also plan to modify slob\_alloc() so it selects the page in order of best fit
 \section{Work Log}
 \noindent What work was done and when:
 \begin{description}
-\item [11/30/17] Met at Kelley at 9:30 to work on the assignment.
+\item [11/30/17] Met at Kelley at 9:30 and worked on the assignment until 1:30.
 
 \end{description}
 
@@ -132,24 +134,32 @@ We also plan to modify slob\_alloc() so it selects the page in order of best fit
 
 \noindent\textbf{What do you think the main point of this assignment is?}
 
-\indent{
+\indent{ The main point of this assignment is learn about memory allocation in the Linux kernel.
+We will gain experience implementating a best-fit algorithm and how to modify existing existing code. 
+We also will learn how to compute the effeciency of the first-fit algorithm and best-fit algorithm and compare the fragmentation sufferred by each algorithm.
+We will learn about how to examine the tradeoffs between each of the implmentations. 
 }
 
 \noindent\textbf{How did you personally approach the problem?}
 
-\indent{
+\indent{ Our personal apparoch to the problem started with understanding the functions in the slob.c file.
+We researched best-fit algorithms for allocating memory and used pseudocode from https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html as the basis for our algorithm design.
+In order to implement best fit we need to find the page that has the minimum amount of space free for the required amount that needs to be allocated.
 
 }
 
 \noindent\textbf{How did you ensure your solution was correct?}
 
 \indent{
+We ensured out solution was correct by writing a test program that allocates memory and outputs the amount of memory used each time. 
+When comparing the first-fit and best-fit slob allocators, we would expect the best-fit allocator to use less memory when the test program runs. 
+Best-fit should use less memory because first-fit allocates memory from the fist block it encounters large enough to hold the request while best fit looks for the minimum sized block that can hold the requested amount.
 
 }
 
 \noindent\textbf{What did you learn?}
 
-\indent{
+\indent{ We learned about how memory is allocated in the kernel and how to modify an existing slob allocator implementation to use a best-fit allgorithm. 
 
 }
 
@@ -171,17 +181,8 @@ We also plan to modify slob\_alloc() so it selects the page in order of best fit
 \item \texttt{[Step: 14] \$GDB \newline //From another terminal}
 \item \texttt{[Step: 15] target remote :5519}
 \item \texttt{[Step: 16] continue}
-\item \texttt{[Step: 17] scp -P 8080 ./drivers/block/sbd.ko root@localhost:~ \newline //From another terminal}
+\item \texttt{[Step: 17] scp -P 8080 ./test.c root@localhost:~ \newline //From another terminal}
 \item \texttt{[Step: 18] Login to VM as root and test with the following}
-\item \texttt{[Step: 19] insmod sbd.ko key="1234567899"} 
-\item \texttt{[Step: 20] mkfs.ext2 /dev/sbd0}
-\item \texttt{[Step: 21] mkdir test}
-\item \texttt{[Step: 22] mount /dev/sbd0 ./test}
-\item \texttt{[Step: 23] echo ‘encrypt this message’ > ./test/encrypt}
-\item \texttt{[Step: 24] grep -a ‘encrypt’ /dev/sbd0}
-\item \texttt{[Step: 25] cat ./test/encrypt}
-\item \texttt{[Step: 26] umount ./test}
-\item \texttt{[Step: 27] rmmod sbd.ko}
 
 \end{description}
 
