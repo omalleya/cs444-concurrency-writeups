@@ -189,8 +189,8 @@ Best-fit should use less memory because first-fit allocates memory from the fist
 \item \texttt{[Step: 22] run to see current memory usage}
 \item \texttt{[Step: 23] insmod test.ko \newline //loads module}
 \item \texttt{[Step: 24] run test files again to see memory usage}
-\item \texttt{[Step: 25] repeat steps for old slob by renaming mm/slob.c to mm/slob-new.c and renaming slob-old.c to slob.c}
-\item \texttt{[Step: 26] then run "make -j4 all" to reflect the changes to slob}
+\item \texttt{[Step: 25] repeat steps 1-24 to test old slob but first rename mm/slob.c to mm/slob-new.c and renaming slob-old.c to slob.c}
+\item \texttt{[Step: 26] also run "make -j4 all" to reflect the changes to slob}
 \end{description}
 
 \bibliography{hw4}
