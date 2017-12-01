@@ -1,0 +1,193 @@
+\documentclass[10pt,letterpaper,draftclsnofoot,onecolumn]{IEEEtran}
+    
+\usepackage{graphicx}                                        
+\usepackage{amssymb}                                         
+\usepackage{amsmath}                                         
+\usepackage{amsthm}                                          
+
+\usepackage{alltt}                                           
+\usepackage{float}
+\usepackage{color}
+\usepackage{url}
+
+\usepackage{balance}
+\usepackage[TABBOTCAP, tight]{subfigure}
+\usepackage{enumitem}
+%\usepackage{pstricks, pst-node}
+
+\usepackage{listings}
+% Taken from http://timmurphy.org/2014/01/27/displaying-code-in-latex-documents/ with some modifications
+\lstset{
+    frame=none,
+    tabsize=4, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    numbers=none, 
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red}, % string color
+    basicstyle={\small\ttfamily}, % font style
+    belowcaptionskip=1\baselineskip
+}
+
+\usepackage{geometry}
+\geometry{margin=0.75in}
+
+%random comment
+
+\newcommand{\cred}[1]{{\color{red}#1}}
+\newcommand{\cblue}[1]{{\color{blue}#1}}
+
+\newcommand{\toc}{\tableofcontents}
+
+\usepackage{hyperref}
+
+\def\name{Will Sims, Aidan O'Malley}
+
+%pull in the necessary preamble matter for pygments output
+%\input{pygments.tex}
+
+%% The following metadata will show up in the PDF properties
+\hypersetup{
+    colorlinks = false,
+    urlcolor = black,
+    pdfauthor = {\name},
+    pdfkeywords = {cs444},
+    pdftitle = {CS 444 Project 4: 4},
+    pdfsubject = {CS 444 Project 4},
+    pdfpagemode = UseNone
+}
+
+\parindent = 0.0 in
+\parskip = 0.1 in
+
+\begin{document}
+
+%input the pygmentized output of mt19937ar.c, using a (hopefully) unique name
+%this file only exists at compile time. Feel free to change that.
+
+\begin{titlepage}
+\title{CS 444 Project 3: Encrypted Block Device}
+\author
+{\IEEEauthorblockN{Will Sims, Aidan O'Malley\\
+}
+\IEEEauthorblockA{
+CS 444\\
+Fall 2017
+}}
+    \maketitle
+    \vspace{2cm}
+    \begin{abstract}
+        \noindent This document contains the write-up for Project 4 of Operating Systems II. 
+        We modified an existing SLOB allocator implementation to use a best-fit algorithm. 
+
+    \end{abstract}
+
+\end{titlepage}
+
+\section{Design for SLOB SLAB}
+\noindent{The SLOB allocator is a small and efficient allocator that uses a first-fit algorithm for memory allocation.
+Before we started programming we first looked up documentation to understand the slob implementation and best-fit algorithms. 
+After viewing slob.c, we noticed that the slob\_alloc() implements a first-fit algorithm to search for a page that has enough space for a new request.
+We plan to modify slob\_alloc() and used this pseudocode as a reference for our best-fit algorithm: 
+
+\lstset{language=C++,caption={Best-fit algorithm pseudocode\cite{bestfit}.}}
+\begin{lstlisting}
+size(block) = n + size(header) 
+Scan free list for smallest block with nWords >= size(block) 
+if block not found 
+    Failure (Garbage collection) 
+else if free block nWords >= size(block) + threshold* 
+    Split into a free block and an in-use block 
+    Free block nWords = Free block nWords - size(block) 
+    In-use block nWords = size(block) 
+    Return pointer to in-use block 
+else 
+    Unlink block from free list 
+    Return pointer to block 
+\end{lstlisting}
+
+Reference: https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html
+
+}
+
+\section{Version Control Log}
+\noindent Table from repo logs:
+
+\begin{center}
+    \begin{tabular}{ | p{8cm} | p{3cm} | p{6cm} |}
+    \hline
+    Commit Link & Author & Commit Message \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/1c1a0c751d5fe807aa23f82d29d99dda6977e900}{1c1a0c751d5fe807aa23f82d29d99dda6977e900} & William Sims & adds project 4 write-up \\ \hline
+    0ab81e85157f5ee29765150f8c76ab9fe850102e & omalleya & adds changes to slob\_alloc to implement best fit and create mem\_usage\ syscall \\ \hline
+ 
+    \end{tabular}
+\end{center}
+
+\section{Work Log}
+\noindent What work was done and when:
+\begin{description}
+\item [11/30/17] Met at Kelley at 9:30 and worked on the assignment until 1:30.
+
+\end{description}
+
+\section{Questions}
+
+\noindent\textbf{What do you think the main point of this assignment is?}
+
+\indent{ The main point of this assignment is learn about memory allocation in the Linux kernel.
+We will gain experience implementating a best-fit algorithm and how to modify existing existing code. 
+We also will learn how to compute the effeciency of the first-fit algorithm and best-fit algorithm and compare the fragmentation sufferred by each algorithm.
+We will learn about how to examine the tradeoffs between each of the implmentations. 
+}
+
+\noindent\textbf{How did you personally approach the problem?}
+
+\indent{ Our personal apparoch to the problem started with understanding the functions in the slob.c file.
+We researched best-fit algorithms for allocating memory and used pseudocode from https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html as the basis for our algorithm design.
+In order to implement best fit we need to find the page that has the minimum amount of space free for the required amount that needs to be allocated.
+
+}
+
+\noindent\textbf{How did you ensure your solution was correct?}
+
+\indent{
+We ensured out solution was correct by writing a test program that allocates memory and outputs the amount of memory used each time. 
+When comparing the first-fit and best-fit slob allocators, we would expect the best-fit allocator to use less memory when the test program runs. 
+Best-fit should use less memory because first-fit allocates memory from the fist block it encounters large enough to hold the request while best fit looks for the minimum sized block that can hold the requested amount.
+
+}
+
+\noindent\textbf{What did you learn?}
+
+\indent{ We learned about how memory is allocated in the kernel and how to modify an existing slob allocator implementation to use a best-fit allgorithm. 
+
+}
+
+\noindent\textbf{How should the TA evaluate your work? Provide detailed steps to prove correctness.}
+\begin{description}
+\item \texttt{[Step: 1] START FROM CLEAN linux-yocto v3.19.2}
+\item \texttt{[Step: 2] git apply assign3.patch}
+\item \texttt{[Step: 3] source /scratch/opt/poky/1.8/environment-setup-i586-poky-linux}
+\item \texttt{[Step: 4] cp /scratch/files/core-image-lsb-sdk-qemux86.ext4 *top of linux tree* \newline //copy driver file if not inside already}
+\item \texttt{[Step: 5] cp /scratch/files/config-3.19.2-yocto-standard *top of linux tree* \newline//copy config if not inside already}
+\item \texttt{[Step: 6] make menuconfig}
+\item \texttt{[Step: 7] General Setup}
+\item \texttt{[Step: 8] Change local version name to “-group-19”}
+\item \texttt{[Step: 9] Go back to first page of menuconfig and go to Device Drivers}
+\item \texttt{[Step: 10] Go to block devices and set Encrypted Block Device as a module}
+\item \texttt{[Step: 11] Save and Exit}
+\item \texttt{[Step: 12] make -j4 all \newline //build kernel}
+\item \texttt{[Step: 13] command to start VM: \newline qemu-system-i386 -gdb tcp::5519 -S -nographic -kernel arch/x86/boot/bzImage -drive file=core-image-lsb-sdk-qemux86.ext4 -enable-kvm -net nic -net user,hostfwd=tcp::8080-:22 -usb -localtime --no-reboot --append "root=/dev/hda rw console=ttyS0 debug"}
+\item \texttt{[Step: 14] \$GDB \newline //From another terminal}
+\item \texttt{[Step: 15] target remote :5519}
+\item \texttt{[Step: 16] continue}
+\item \texttt{[Step: 17] scp -P 8080 ./test.c root@localhost:~ \newline //From another terminal}
+\item \texttt{[Step: 18] Login to VM as root and test with the following}
+
+\end{description}
+
+\bibliography{hw4}
+\bibliographystyle{IEEEtran}
+
+\end{document}
+    
