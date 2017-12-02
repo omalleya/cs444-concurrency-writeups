@@ -78,7 +78,8 @@ Fall 2017
     \vspace{2cm}
     \begin{abstract}
         \noindent This document contains the write-up for Project 4 of Operating Systems II. 
-        We modified an existing SLOB allocator implementation to use a best-fit algorithm. 
+        We modified an existing first-fit SLOB allocator implementation to use a more efficient best-fit algorithm. 
+        Included is the design for our SLOB allocator, a version control log, work log and responses to the main write-up questions.
 
     \end{abstract}
 
@@ -119,7 +120,10 @@ Reference: https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html
     Commit Link & Author & Commit Message \\ \hline
     \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/1c1a0c751d5fe807aa23f82d29d99dda6977e900}{1c1a0c751d5fe807aa23f82d29d99dda6977e900} & William Sims & adds project 4 write-up \\ \hline
     0ab81e85157f5ee29765150f8c76ab9fe850102e & omalleya & adds changes to slob\_alloc to implement best fit and create mem\_usage\ syscall \\ \hline
- 
+    93b0a18a4441586970ee8b6bf21c6abe92d50696 & omalleya & working implementation commit \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/f05ef64b0aeb2aefb26a25f78b20e26b738458f1}{f05ef64b0aeb2aefb26a25f78b20e26b738458f1} & omalleya & adds evaluation details and testing specifics \\ \hline
+    \href{https://github.com/omalleya/cs444-concurrency-writeups/commit/f05ef64b0aeb2aefb26a25f78b20e26b738458f1}{f05ef64b0aeb2aefb26a25f78b20e26b738458f1} & omalleya & adds patch file \\ \hline
+    
     \end{tabular}
 \end{center}
 
@@ -127,6 +131,8 @@ Reference: https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html
 \noindent What work was done and when:
 \begin{description}
 \item [11/30/17] Met at Kelley at 9:30 and worked on the assignment until 1:30.
+\item [11/30/17] We each worked remotely from home on the write-up for approximately an hour each.
+\item [12/1/17] Aidan worked on finalizing our testing for the SLOB allocator for appoximately 2 hours and created a Kernel module. 
 
 \end{description}
 
@@ -145,7 +151,6 @@ We will learn about how to examine the tradeoffs between each of the implmentati
 \indent{ Our personal apparoch to the problem started with understanding the functions in the slob.c file.
 We researched best-fit algorithms for allocating memory and used pseudocode from https://www.cs.rit.edu/~ark/lectures/gc/03\_03\_03.html as the basis for our algorithm design.
 In order to implement best fit we need to find the page that has the minimum amount of space free for the required amount that needs to be allocated.
-
 }
 
 \noindent\textbf{How did you ensure your solution was correct?}
@@ -154,7 +159,8 @@ In order to implement best fit we need to find the page that has the minimum amo
 We ensured out solution was correct by writing a test program that allocates memory and outputs the amount of memory used each time. 
 When comparing the first-fit and best-fit slob allocators, we would expect the best-fit allocator to use less memory when the test program runs. 
 Best-fit should use less memory because first-fit allocates memory from the fist block it encounters large enough to hold the request while best fit looks for the minimum sized block that can hold the requested amount.
-
+We created a test module and two testing programs to verify our solution.
+Instructions on how to run they test programs are included in TA evaluation section. 
 }
 
 \noindent\textbf{What did you learn?}
@@ -182,7 +188,7 @@ Best-fit should use less memory because first-fit allocates memory from the fist
 \item \texttt{[Step: 15] continue}
 \item \texttt{[Step: 16] scp -P 8000 ./test.c root@localhost:~ \newline //From another terminal}
 \item \texttt{[Step: 17] scp -P 8000 ./test-2.c root@localhost:~}
-\item \texttt{[Step: 18] cd ./testmodule && make}
+\item \texttt{[Step: 18] cd ./testmodule \&\& make}
 \item \texttt{[Step: 19] scp -P 8000 ./test.ko root@localhost:~ \newline //transfers over module}
 \item \texttt{[Step: 20] Login to VM as root and test with the following}
 \item \texttt{[Step: 21] compile test.c files with gcc}
